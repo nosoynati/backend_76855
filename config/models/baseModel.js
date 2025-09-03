@@ -4,4 +4,4 @@ const Schema = Model.schema({
   
 })
 
-export const baseSchema = mongoose.Schema("base-schema", Schema)
+export const userSchema = mongoose.Schema("base-schema", Schema)
