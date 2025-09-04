@@ -28,3 +28,23 @@ Estructura de carpetas
 │ └─app.js
 └package.json
 ```
+
+### Rutas
+
+- Home: 
+ruta pública: `"/"`
+
+- Users:
+```
+/api/sessions/current (session actual)
+/api/users
+/api/users/:id
+```
+
+- Auth:
+```
+/api/auth/login
+/api/auth/logout
+/api/auth/jwt/login (con JWT)
+/api/auth/jwt/me (datos de session)
+```
