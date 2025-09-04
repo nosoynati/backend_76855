@@ -1,6 +1,6 @@
-import { Model } from "mongoose";
+import mongoose from "mongoose";
 
-const userSchema = Model.schema(
+const userSchema = new mongoose.Schema(
   {
     first_name: {
       type: String,
@@ -9,7 +9,7 @@ const userSchema = Model.schema(
     last_name: {
       type: String,
       required: true,
-      index: true
+      index: true,
     },
     age: {
       type: Number,
@@ -21,11 +21,13 @@ const userSchema = Model.schema(
       index: true,
     },
     githubid: {
-      type:String
+      type: String,
     },
     password: {
       type: String,
-      required: function() {return !this.githubid}
+      required: function () {
+        return !this.githubid;
+      },
     },
     role: {
       type: String,
@@ -38,4 +40,4 @@ const userSchema = Model.schema(
   }
 );
 
-export const User = mongoose.Schema("user-schema", userSchema);
+export const User = mongoose.model("User", userSchema);
