@@ -1,23 +1,23 @@
 import { Router } from 'express';
-import { userSchema } from '../../config/models/baseModel';
+import { User } from '../../config/models/userModel';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 
 const userRouter = Router();
 
 userRouter.get("/:id", (req,res) => {
-  const { id } = userSchema.findOne({ _id: id });
+  
   try{
     const user = req.params?.id
-    if(!user || !user.id) {
-      return res.status(401).json({ error: "Oops, something exploded!"})
-    }
-    return res.json({ user: { user}})
 
   }catch(err){
     res.status(500).json({ status: "Error", error: err})
   }
 
+})
+userRouter.get("/sessions/current", (req,res) => {
+  //Que la estrategia "current" 
+  // permita extraer el usuario asociado al token JWT de manera efectiva.
 })
 userRouter.post("/", (req,res) => {
   

@@ -1,16 +1,40 @@
-import bcrypt from "bcrypt";
-import * as jwt from "jswonwebtoken";
+import jwt from 'jsonwebtoken';
 
-export function requireLogin (req, res, next){
-  if(!req.session.user) return res.status(401).json({ message: "No autorizado"}) 
+export function requireLogin(req,res,next){
+  if(!req.session.user){
+    return res.status(401).json({
+      error: "No autorizado 😨"
+    })
+  }
   next();
 };
 
-export function alreadyLoggedin (req, res, next){
-  if (req.session.user) return res.status(403).json({ message: "Ya estás logeado!"});
+export function auth(req,res,next){
+  if(req.session.user){
+    return res.status(403).json({
+      error: "Ya estás logeado 😅"
+    })
+  }
   next();
 };
-export function requireRole  (req, res, next){
-  return null;
+// auth de roles
+export function requireRole(role){
+  // validar que haya un usuario en la sesion
+  return (req, res, next) => {
+    const user = req.session?.user || req.user; // session o passport
+    if(!user) return res.status(401).json({error: "No autorizado🍟"});
+    if(user.role != role) return res.status(403).json({error: "Verificá tus privilegios💅"});
+    next();
+  }
 };
-export function requireToken  (req, res, next){};
+export function requireJWT(req, res,next){
+  const header = req.headers["authorization"] || "";
+  const token = header && header.split(" ")[1];
+  if(!token) return res.status(401).json({error: "No hay token🍟"});
+  try {
+    req.jwt = jwt.verify(token, process.env.JWT_SECRET);
+    next();
+  }catch(err){
+    return res.status(401).json({error: "Token invalido o expirado🍟"});
+  }
+};

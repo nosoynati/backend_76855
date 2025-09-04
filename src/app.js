@@ -2,7 +2,9 @@ import express from "express";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import session from "express-session";
+import homeRouter from './routes/main.routes';
 import userRouter from "./routes/user.routes";
+import authRouter from "./routes/auth.routes";
 
 const app = express();
 dotenv.config();
@@ -21,11 +23,9 @@ app.use(
   })
 );
 
-app.get("/", (_, res) => {
-  res.json({ message: "hey!" });
-});
-
-app.get("/user", userRouter);
+app.get("/",homeRouter);
+app.get("/api", authRouter);
+app.get("/api", userRouter);
 
 app.listen(PORT, () => {
   console.log(`✅Live at port http://localhost:${PORT}`);
