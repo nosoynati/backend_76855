@@ -1,10 +1,11 @@
 import { Router } from "express";
 import { User } from "../../config/models/userModel.js";
-import jwt from "jsonwebtoken";
-import bcrypt from "bcrypt";
+import { requireLogin } from "../middleware/auth.middleware.js";
+
 
 const userRouter = Router();
 const users = [];
+
 userRouter.get("/users", async (_, res) => {
   try {
     const result = await User.find();
@@ -16,10 +17,10 @@ userRouter.get("/users", async (_, res) => {
         email: u.email,
         role: u.role
       })
-    })
+    });
 
     res.json({
-      status: "success",
+      status: "Success ✨",
       payload: users
     });
   } catch (error) {
@@ -42,8 +43,12 @@ userRouter.get("/users/:id", async (req, res) => {
 userRouter.post("/user/create", (req, res) => {});
 userRouter.put("/user/:id", (req, res) => {});
 userRouter.delete("/user", (req, res) => {});
+
 userRouter.get("/sessions/current", (req, res) => {
   //Que la estrategia "current"
   // permita extraer el usuario asociado al token JWT de manera efectiva.
+  res.json({
+    user: req.session?.user
+  })
 });
 export default userRouter;
