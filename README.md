@@ -12,13 +12,19 @@ Estructura de carpetas
 ```js
 │config
 │ ├─models
+│ │ └─userModel.js  
 │ ├─auth
-│ │ └─auth.config.json
-│ └─db.config.json
+│ │ └─passport.config.js
+│ └─db.config.js
 ├src
 │ ├─middlewares
+│ │ └─auth.middleware.js
 │ ├─routes
+│ │ ├─auth.routes.js
+│ │ ├─user.routes.js
+│ │ └─main.routes.js
 │ ├─utils
+│ │ └─isValidPassword.js
 │ └─app.js
 └package.json
 ```
