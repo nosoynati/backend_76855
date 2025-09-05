@@ -9,7 +9,7 @@ import authRouter from "./routes/auth.routes.js";
 import passport from "passport";
 import initPassport from "../config/auth/passport.config.js";
 import MongoStore from "connect-mongo";
-import { requireLogin } from "./middleware/auth.middleware.js";
+import { requireLogin, requireRole } from "./middleware/auth.middleware.js";
 
 const app = express();
 dotenv.config({ quiet: true});
