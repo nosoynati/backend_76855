@@ -2,6 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import session from "express-session";
+import * as dt from '../config/dotenv.config.js';
 import { connectAuto } from "../config/db.config.js";
 import homeRouter from "./routes/main.routes.js";
 import userRouter from "./routes/user.routes.js";
@@ -9,7 +10,7 @@ import authRouter from "./routes/auth.routes.js";
 import passport from "passport";
 import initPassport from "../config/auth/passport.config.js";
 import MongoStore from "connect-mongo";
-import { requireLogin, requireRole } from "./middleware/auth.middleware.js";
+import { requireLogin } from "./middleware/auth.middleware.js";
 
 const app = express();
 dotenv.config({ quiet: true});
