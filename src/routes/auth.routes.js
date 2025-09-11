@@ -4,7 +4,7 @@ import { createHash } from "../utils/isValidPassword.js";
 import passport from "passport";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
-import { requireLogin, alreadyLoggedin, requireJWT } from "../middleware/auth.middleware.js";
+import { requireLogin, alreadyLoggedin, requireJWT, requiereJwtCookie } from "../middleware/auth.middleware.js";
 
 const authRouter = Router();
 
@@ -98,7 +98,7 @@ authRouter.post("/auth/jwt/login", alreadyLoggedin, async (req, res) => {
   res.json({ message: "Login OK (jwt) 🤙" });
 });
 
-authRouter.get("/auth/jwt/me", requireJWT, async (req, res) => {
+authRouter.get("/auth/jwt/me", requiereJwtCookie, async (req, res) => {
   const user = await User.findById(req.jwt.sub).lean();
   if (!user) return res.status(404).json({ error: "No encontrado 🔍❌" });
   const { first_name, las_name, email, age, role } = user;

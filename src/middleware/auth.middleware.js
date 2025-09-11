@@ -38,3 +38,4 @@ export function requireJWT(req, res,next){
     return res.status(401).json({error: "Token invalido o expirado🍟"});
   }
 };
+export const requiereJwtCookie = passport.authenticate('jwt-cookie', {session: false});
