@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { User } from "../../config/models/userModel.js";
-import { requireLogin, requireJWT } from "../middleware/auth.middleware.js";
+import { requireLogin, requiereJwtCookie } from "../middleware/auth.middleware.js";
+import { policies } from '../middleware/policies.middleware.js';
 
 const userRouter = Router();
 const users = [];
@@ -40,7 +41,7 @@ userRouter.get("/users/:id", async (req, res) => {
   }
 });
 
-userRouter.put("/users/:id", async (req, res) => {
+userRouter.put("/users/:id", policies("admin"), async (req, res) => {
   const id = req.params.id;
   const { first_name, last_name, email, age, role } = req.body;
   try {
@@ -67,7 +68,7 @@ userRouter.put("/users/:id", async (req, res) => {
     });
   }
 });
-userRouter.delete("/users/:id", async (req, res) => {
+userRouter.delete("/users/:id", policies("admin"), async (req, res) => {
   const id = req.params.id;
 
   try {
@@ -86,7 +87,7 @@ userRouter.delete("/users/:id", async (req, res) => {
   }
 });
 
-userRouter.get("/sessions/current", requireJWT, (req, res) => {
+userRouter.get("/sessions/current", requiereJwtCookie, (req, res) => {
   res.json({
     user: req.session?.user,
   });
