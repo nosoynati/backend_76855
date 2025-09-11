@@ -67,17 +67,16 @@ userRouter.put("/users/:id", async (req, res) => {
     });
   }
 });
-userRouter.delete("/users", async (req, res) => {
+userRouter.delete("/users/:id", async (req, res) => {
   const id = req.params.id;
 
   try {
     const result = await User.deleteOne({ _id: id });
     if (!result) {
-      throw new Error("Student not found!");
+      throw new Error("User not found!");
     }
     res.status(204).json({
       status: "success",
-      payload: result,
     });
   } catch (error) {
     res.status(400).json({
