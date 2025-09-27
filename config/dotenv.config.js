@@ -2,13 +2,22 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-export default {
+export const env = {
   PORT: process.env.PORT,
   MONGO_URI: process.env.MONGO_URI,
+  MONGO_TARGET: process.env.MONGO_TARGET,
   SECRET:process.env.SECRET,
-  JWT_SECRET: process.env.JWT_SECRET,
-  GITHUB_CLIENT_ID: process.env.GITHUB_CLIENT_ID,
-  GITHUB_CLIENT_SECRET: process.env.GITHUB_CLIENT_SECRET,
-  GITHUB_CALLBACK_URL: process.env.GITHUB_CALLBACK_URL
+  JWT_SECRET: process.env.JWT_SECRET
 
+}
+export const validateEnv = () => {
+  const missing = [];
+
+}
+export const getPublicEnv = () => {
+  return {
+    NODE_ENV: env.NODE_ENV,
+    PORT: env.PORT,
+    MONGO_TARGET: env.MONGO_TARGET
+  }
 }
