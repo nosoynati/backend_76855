@@ -2,7 +2,6 @@ import express from "express";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import session from "express-session";
-import * as dt from '../config/dotenv.config.js';
 import { connectAuto } from "../config/db.config.js";
 import homeRouter from "./routes/main.routes.js";
 import userRouter from "./routes/user.routes.js";

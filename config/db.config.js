@@ -1,9 +1,9 @@
 import mongoose from "mongoose";
 import dotenv from "dotenv";
+import {env} from './dotenv.config.js'
 
 dotenv.config();
-const MONGO_URI = process.env.MONGO_URI;
-const isLocal = true;
+const MONGO_URI = env.MONGO_URI;
 
 export const connectLocal = async () => {
   try {
@@ -26,5 +26,5 @@ export const connectAtlas = async () => {
   }
 };
 export const connectAuto = async() => {
-  isLocal ? await connectLocal() : await connectAtlas();
+  env.MONGO_TARGET == "LOCAL" ? await connectLocal() : await connectAtlas();
 }

@@ -4,15 +4,16 @@ import { requireLogin, requiereJwtCookie } from "../middleware/auth.middleware.j
 import { policies } from '../middleware/policies.middleware.js';
 
 const userRouter = Router();
-const users = [];
 
-userRouter.get("/users", async (_, res) => {
+
+userRouter.get("/users", policies("editor","admin"), async (_, res) => {
   try {
     const result = await User.find();
+    const users = [];
     result.map((u) => {
       users.push({
         id: u._id,
-        name: u.first_name,
+        first_name: u.first_name,
         last_name: u.last_name,
         age: u.age,
         email: u.email,

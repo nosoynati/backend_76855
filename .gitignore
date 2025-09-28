@@ -1,5 +1,6 @@
 node_modules
 .env
 *.env
+flow.yaml
 */node_modules
 sessions

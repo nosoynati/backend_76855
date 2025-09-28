@@ -9,7 +9,7 @@ import { requireLogin, alreadyLoggedin, requireJWT, requiereJwtCookie } from "..
 const authRouter = Router();
 
 authRouter.get("/auth", async (_, res) => {
-  res.status(200).json({ message: "hey!" });
+  res.status(200).json({ message: "Auth path ok" });
 });
 
 // Crear un usuario
