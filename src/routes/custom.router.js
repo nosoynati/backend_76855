@@ -1,19 +1,39 @@
 import { Router } from "express";
 
-export default class UserRouter{
-  constructor({ mergeParams=true, base = ""} = {}) {
+export default class customRouter {
+  constructor({ mergeParams = true, base = "" } = {}) {
     this.base = base;
     this.router = Router({ mergeParams });
-  
+    this.params = this.router.param.bind(this.router);
   }
-  use(){
+  _wrap(fn){
+    if(typeof fn != 'function') return fn;
+    return function wrapped(req, res, next){
+      try{
+        const r = fn(req,res,next);
+        if(r && typeof r == 'function') r.catch(next);
+      }catch(e){
+        next(e)
+      }
+    }
+  }
+  use(...args) {this.router.use(...args)};
 
+  get() {
+    this.router.get(path, ...handlers.map(h => this._wrap(h)));
   }
-  get(){
-    this.router.get()
+  post() {
+    this.router.post(path, ...handlers.map(h => this._wrap(h)));
   }
-  post(){
-    this.router.post()
+  put(){
+    this.router.put(path, ...handlers.map(h => this._wrap(h)))
+  }
+  delete(){
+    this.router.delete(path, ...handlers.map(h => this._wrap(h)));
+  }
+  group(prefix, buildfn){
+    const subrouter = new customRouter();
+    buildfn(subrouter)
+    this.router.use(prefix, subrouter.router)
   }
 }
-
