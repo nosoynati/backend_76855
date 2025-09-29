@@ -1,10 +1,9 @@
 import { Router } from "express";
 import { User } from "../../config/models/userModel.js";
-import { requireLogin, requiereJwtCookie } from "../middleware/auth.middleware.js";
+import { requiereJwtCookie, requireLogin } from "../middleware/auth.middleware.js";
 import { policies } from '../middleware/policies.middleware.js';
 
 const userRouter = Router();
-
 
 userRouter.get("/users", policies("editor","admin"), async (_, res) => {
   try {
@@ -88,9 +87,9 @@ userRouter.delete("/users/:id", policies("admin"), async (req, res) => {
   }
 });
 
-userRouter.get("/sessions/current", requiereJwtCookie, (req, res) => {
+userRouter.get("/sessions/current", (requireLogin || requiereJwtCookie), (req, res) => {
   res.json({
-    user: req.session?.user,
+    user: req.user || req.session?.user,
   });
 });
 export default userRouter;

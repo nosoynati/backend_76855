@@ -28,6 +28,7 @@ authRouter.post("/auth/login", alreadyLoggedin, (req, res, next) => {
         user: user.first_name,
       });
     });
+    
   })(req, res, next);
 });
 

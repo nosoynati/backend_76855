@@ -1,42 +1,43 @@
-import jwt from 'jsonwebtoken';
-import passport from 'passport';
+import jwt from "jsonwebtoken";
+import passport from "passport";
 
-export function requireLogin(req,res,next){
-  if(!req.session.user){
+export function requireLogin(req, res, next) {
+  if (!req.session || !req.session.user) {
     return res.status(401).json({
-      error: "No autorizado 😨"
-    })
+      error: "No autorizado 😨",
+    });
   }
   next();
-};
+}
 
-export function alreadyLoggedin(req,res,next){
-  if(req.session.user){
+export function alreadyLoggedin(req, res, next) {
+  if (req.session.user) {
     return res.status(403).json({
-      error: "Ya estás logeado 😅"
-    })
+      error: "Ya estás logeado 😅",
+    });
   }
   next();
-};
+}
 // auth de roles
-export function requireRole(role){
+export function requireRole(role) {
   // validar que haya un usuario en la sesion
   return (req, res, next) => {
     const user = req.session?.user || req.user; // session o passport
-    if(!user) return res.status(401).json({error: "No autorizado🍟"});
-    if(user.role != role) return res.status(403).json({error: "Verificá tus privilegios💅"});
+    if (!user) return res.status(401).json({ error: "No autorizado🍟" });
+    if (user.role != role) return res.status(403).json({ error: "Verificá tus privilegios💅" });
     next();
-  }
-};
-export function requireJWT(req, res,next){
+  };
+}
+export function requireJWT(req, res, next) {
   const header = req.headers["authorization"] || "";
   const token = header && header.split(" ")[1];
-  if(!token) return res.status(401).json({error: "No hay token🍟"});
+  if (!token) return res.status(401).json({ error: "No hay token🍟" });
   try {
     req.jwt = jwt.verify(token, process.env.JWT_SECRET);
     next();
-  }catch(err){
-    return res.status(401).json({error: "Token invalido o expirado🍟"});
+  } catch (err) {
+    return res.status(401).json({ error: "Token invalido o expirado🍟" });
   }
-};
-export const requiereJwtCookie = passport.authenticate('jwt-cookie', {session: false});
+}
+
+export const requiereJwtCookie = passport.authenticate("jwt-cookie", { session: false });

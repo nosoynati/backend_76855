@@ -7,15 +7,18 @@ import passport from "passport";
 
 import { connectAuto } from "../config/db.config.js";
 import homeRouter from "../src/routes/main.routes.js";
-import userRouter from "../src/routes/user.routes.js";
-import authRouter from "../src/routes/auth.routes.js";
-import orderRouter from "../src/routes/order.routes.js";
 
 import { env } from "../config/dotenv.config.js";
 import initPassport from "../config/auth/passport.config.js";
 
-import { requireLogin } from "../src/middleware/auth.middleware.js";
 import logger from "../src/middleware/logger.middleware.js";
+
+// hbs
+import { engine } from 'express-handlebars';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { hbsHelpers } from "../src/utils/hbs.helpers.js";
+import orderRouter from "../src/routes/order.routes.js";
 
 const app = express();
 dotenv.config({ quiet: true});
@@ -27,6 +30,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser(SECRET));
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 const startServer = async () => {
   await connectAuto();
   const store = MongoStore.create({
@@ -37,23 +43,30 @@ const startServer = async () => {
     session({
       secret: SECRET,
       resave: false,
-      saveUninitialized: true,
+      saveUninitialized: false,
       store,
       cookie: {
         maxAge: 60 * 60 * 1000,
         httpOnly: true,
+        secure: false,
+        sameSite: "lax"
       },
     })
   );
+  app.engine('handlebars', engine({
+    defaultLayout: 'main',
+    layoutsDir: path.join(__dirname, '../views/layouts'),
+    helpers: hbsHelpers
+  }))
+  app.set('view engine', 'handlebars');
+  app.set('views', path.join(__dirname, '../views'));
   // inicializar passport
   initPassport();
   app.use(passport.initialize());
   app.use(passport.session());
 
-  app.get("/", homeRouter);
-  app.use("/api", authRouter);
-  app.use("/api", requireLogin, userRouter);
-  app.use("/order", orderRouter);
+  app.use("/", homeRouter);
+  app.use("/orders", orderRouter)
   app.use((_, res) => {
     res.status(400).json({
       error: "No encontrado 💣",

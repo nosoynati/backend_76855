@@ -3,6 +3,26 @@ import { User } from "../../config/models/userModel.js";
 import { orderService } from "../services/order.service.js";
 import { createOrderDto} from "../dto/order.dto.js";
 
+
+export const listView = async (req, res) => {
+    try {
+    let data;
+    const page = Number(req.query.page || 1);
+    const limit = Number(req.query.limit || 0);
+    const status = req.query.status;
+   
+      data = await orderService.list({ page, limit, status });
+      res.status(200).render("orders/index", {
+        title: "Ordenes",
+        orders: data.items,
+        pagination: { page: data.page, pages: data.pages, total: data.total, limit: data.limit},
+        currentStatus: status || "all"
+      })
+    
+  } catch (e) {
+    res.status(500).send("Hubo un error *sadface*");
+  }
+}
 export const getOrders = async (req, res) => {
   try {
     let data;
