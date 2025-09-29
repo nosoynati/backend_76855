@@ -1,6 +1,7 @@
 import { Order } from "../../config/models/order.model.js";
 import { User } from "../../config/models/userModel.js";
 import { orderService } from "../services/order.service.js";
+import { createOrderDto} from "../dto/order.dto.js";
 
 export const getOrders = async (req, res) => {
   try {
@@ -26,10 +27,12 @@ export const getOrders = async (req, res) => {
 
 export const createOrder = async (req, res) => {
   try {
-    const order = await orderService.create(req.body);
+    const {email, first_name} = req.session?.user;
+    const dto = createOrderDto(req.body, {email, first_name})
+    const order = await orderService.create(dto);
     res.status(201).json({ status: "Ok! 🎉", order: order });
   } catch (e) {
-    res.status(400).json({ error: "Error en order 😫" });
+    res.status(400).json({ error: "Error en order 😫",e });
   }
 };
 // export const createOrder = async (req, res) => {
@@ -61,52 +64,3 @@ export const createOrder = async (req, res) => {
 // };
 export const updateOrder = async (req, res) => {};
 export const deleteOrder = async (req, res) => {};
-/*¨
-  code: {
-    type: String,
-    required: true,
-    unique: true,
-    index: true
-  },
-  buyerName: {
-    type: String,
-    required: true
-  },
-  buyerEmail:{
-    type: String,
-    required: true
-  },
-  items: {
-    type: [orderItemsSchema], default: []
-  },
-  total: {
-    type: Number,
-    min: 0,
-    default: 0
-  },
-  status:{
-    type: String,
-    enum: ["pending","paid","delivered","cancelled"],
-    default: "pending",
-    index: true
-
-
-     productId: {
-        type: mongoose.Schema.Types.ObjectId, 
-        ref: "Product"
-      },
-      title: {
-        type: String,
-        required: true
-      },
-      qty: {
-        type: Number,
-        required: true,
-        min: 1
-      },
-      unitPrice: {
-        type: Number,
-        required: true,
-        min: 0
-      }
-  }*/

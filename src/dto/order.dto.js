@@ -1,10 +1,9 @@
 export function createOrderDto(body, user) {
-  const { email, first_name, last_name } = user ?? null;
+  const { email, first_name } = user ?? {};
   if (!email || !first_name) throw new Error("Missing session 🧨");
   const { code, items } = body ?? {};
   if (!code) throw new Error("Missing data 💦");
-  const fullname = first_name.concat(last_name ?? "");
-  return { code, items, email, fullname };
+  return { code, items, buyerEmail: email, buyerName: first_name };
 }
 
 export function updateOrder(body) {

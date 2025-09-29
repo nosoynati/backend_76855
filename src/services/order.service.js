@@ -13,8 +13,8 @@ export class OrderService {
     async getByCode(code){
       return await this.dao.getByCode(code);
     };
-    async create(data){
-      return await this.dao.create(data);
+    async create(dto){
+      return await this.dao.create(dto);
     };
     async update(id, data){
       return await this.dao.update(id, data);
