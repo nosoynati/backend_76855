@@ -1,4 +1,4 @@
-import { User } from "../../config/models/userModel";
+import { User } from "../../config/models/userModel.js";
 
 export class UserService {
   async list() { return User.find() }
@@ -7,3 +7,4 @@ export class UserService {
   async update(id, dto) { return User.findByIdAndUpdate(id, dto, { new: true }) }
   async delete(id) { return !!(await User.findByIdAndDelete(id)) }
 }
+export const userService = new UserService();

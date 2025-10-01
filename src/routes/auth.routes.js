@@ -57,11 +57,16 @@ authRouter.post("/auth/jwt/login", alreadyLoggedin, async (req, res) => {
 });
 
 authRouter.get("/auth/jwt/me", requiereJwtCookie, async (req, res) => {
-  const user = await User.findById(req.jwt.sub).lean();
-  if (!user) return res.status(404).json({ error: "No encontrado 🔍❌" });
-  const { first_name, las_name, email, age, role } = user;
-  res.json({ first_name, las_name, email, age, role });
+  try{
+    const user = await User.findById(req.jwt.sub).lean();
+     if (!user) return res.status(404).json({ error: "No encontrado 🔍❌" });
+    const { first_name, las_name, email, age, role } = user;
+    res.json({ first_name, las_name, email, age, role });
+  }catch(e){
+    res.status(500).json({ error: "Algo explotó" });
+  }  
 });
+
 authRouter.post("/auth/jwt/logout", (_, res) => {
   res.clearCookie("access_token", { path: "/" });
   res.json({ message: "Logout OK! Bai bai 🐱" });

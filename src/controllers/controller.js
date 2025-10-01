@@ -4,11 +4,12 @@ class Controller {
   constructor(entity) {
     this.entity = entity;
   }
-  create(){}
-  read(){}
-  update(){}
-  delete(){}
+  async create(){}
+  async read(){}
+  async update(){}
+  async delete(){}
 }
 
 export const authController = new Controller(User)
 export const orderController = new Controller(Order)
+authController.create()

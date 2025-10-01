@@ -29,6 +29,10 @@ const userSchema = new mongoose.Schema(
         return !this.githubid;
       },
     },
+    cart: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Cart",
+    },
     role: {
       type: String,
       enum: ["user", "admin"],

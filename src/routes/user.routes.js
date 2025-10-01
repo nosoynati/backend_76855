@@ -17,6 +17,7 @@ userRouter.get("/users", policies("admin"), async (_, res) => {
         age: u.age,
         email: u.email,
         role: u.role,
+        cart: u.cart ?? []
       });
     });
 
@@ -87,9 +88,9 @@ userRouter.delete("/users/:id", policies("admin"), async (req, res) => {
   }
 });
 
-userRouter.get("/sessions/current", (requireLogin || requiereJwtCookie), (req, res) => {
+userRouter.get("/sessions/current", requiereJwtCookie, (req, res) => {
   res.json({
-    user: req.user || req.session?.user,
+    user: req.user || req.session?.user
   });
 });
 export default userRouter;

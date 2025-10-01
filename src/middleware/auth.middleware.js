@@ -11,23 +11,15 @@ export function requireLogin(req, res, next) {
 }
 
 export function alreadyLoggedin(req, res, next) {
-  if (req.session.user) {
+
+  if (req.session?.user || req.user || res.cookie.get("access_token")) {
     return res.status(403).json({
       error: "Ya estás logeado 😅",
     });
   }
   next();
 }
-// auth de roles
-export function requireRole(role) {
-  // validar que haya un usuario en la sesion
-  return (req, res, next) => {
-    const user = req.session?.user || req.user; // session o passport
-    if (!user) return res.status(401).json({ error: "No autorizado🍟" });
-    if (user.role != role) return res.status(403).json({ error: "Verificá tus privilegios💅" });
-    next();
-  };
-}
+
 export function requireJWT(req, res, next) {
   const header = req.headers["authorization"] || "";
   const token = header && header.split(" ")[1];

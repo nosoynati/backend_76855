@@ -10,6 +10,9 @@ export class OrderService {
     async get(id){
       return await this.dao.getById(id)
     };
+    async getAll(){
+      return await this.dao.getAll();
+    };
     async getByCode(code){
       return await this.dao.getByCode(code);
     };

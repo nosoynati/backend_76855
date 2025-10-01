@@ -27,15 +27,11 @@ export const getOrders = async (req, res) => {
   try {
     let data;
     const id = req?.params?.id;
-
-    const page = Number(req.query.page || 1);
-    const limit = Number(req.query.limit || 0);
-    const status = req.query.status;
     if (id) {
       data = await orderService.get(id);
       res.status(200).json({ status: "Ok!", data: data });
     } else {
-      data = await orderService.list({ page, limit, status });
+      data = await orderService.getAll();
       res.status(200).json({
         orders: data,
       });
