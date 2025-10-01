@@ -1,11 +1,11 @@
 import { Router } from "express";
 import { User } from "../../config/models/userModel.js";
 import { requiereJwtCookie, requireLogin } from "../middleware/auth.middleware.js";
-import { policies } from '../middleware/policies.middleware.js';
+import { policies, current } from '../middleware/policies.middleware.js';
 
 const userRouter = Router();
 
-userRouter.get("/users", policies("editor","admin"), async (_, res) => {
+userRouter.get("/users", policies("admin"), async (_, res) => {
   try {
     const result = await User.find();
     const users = [];
@@ -31,7 +31,7 @@ userRouter.get("/users", policies("editor","admin"), async (_, res) => {
     });
   }
 });
-userRouter.get("/users/:id", async (req, res) => {
+userRouter.get("/users/:id", current, async (req, res) => {
   try {
     const id = req.params?.id;
     const { first_name, last_name, age, email, role } = await User.findOne({ _id: id });
