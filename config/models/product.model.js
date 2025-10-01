@@ -14,7 +14,7 @@ const productSchema = new mongoose.Schema(
       required: true,
       min: 0,
     },
-    qty: {
+    stock: {
       type: Number,
       required: true,
       min: 1
@@ -22,4 +22,4 @@ const productSchema = new mongoose.Schema(
   }
 )
 
-export const Product = new mongoose.Model("product", productSchema);
+export const Product = new mongoose.model("product", productSchema);

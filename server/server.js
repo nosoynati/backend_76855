@@ -8,7 +8,6 @@ import passport from "passport";
 import { connectAuto } from "../config/db.config.js";
 import homeRouter from "../src/routes/main.routes.js";
 
-import { env } from "../config/dotenv.config.js";
 import initPassport from "../config/auth/passport.config.js";
 
 import logger from "../src/middleware/logger.middleware.js";
@@ -67,6 +66,7 @@ const startServer = async () => {
 
   app.use("/", homeRouter);
   app.use("/orders", orderRouter)
+
   app.use((_, res) => {
     res.status(400).json({
       error: "No encontrado 💣",

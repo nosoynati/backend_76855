@@ -6,7 +6,7 @@ export default class customRouter {
     this.router = Router({ mergeParams });
     this.params = this.router.param.bind(this.router);
   }
-  _wrap(fn){
+  _warp(fn){
     if(typeof fn != 'function') return fn;
     return function wrapped(req, res, next){
       try{
@@ -20,16 +20,16 @@ export default class customRouter {
   use(...args) {this.router.use(...args)};
 
   get() {
-    this.router.get(path, ...handlers.map(h => this._wrap(h)));
+    this.router.get(path, ...handlers.map(h => this._warp(h)));
   }
   post() {
-    this.router.post(path, ...handlers.map(h => this._wrap(h)));
+    this.router.post(path, ...handlers.map(h => this._warp(h)));
   }
   put(){
-    this.router.put(path, ...handlers.map(h => this._wrap(h)))
+    this.router.put(path, ...handlers.map(h => this._warp(h)))
   }
   delete(){
-    this.router.delete(path, ...handlers.map(h => this._wrap(h)));
+    this.router.delete(path, ...handlers.map(h => this._warp(h)));
   }
   group(prefix, buildfn){
     const subrouter = new customRouter();
