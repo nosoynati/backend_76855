@@ -76,7 +76,7 @@ export const createOrder = async (req, res, next) => {
 //     });
 //   }
 // };
-export const updateOrder = async (req, res, next) => {
+export const update = async (req, res, next) => {
   try {
     const { id } = req.params;
     if (!mongoose.Types.ObjectId.isValid(id))

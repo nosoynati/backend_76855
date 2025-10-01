@@ -8,16 +8,12 @@ import { requireLogin } from '../middleware/auth.middleware.js';
 
 const homeRouter = Router();
 const routerv2 = new customRouter();
-
 // router.params.
 
-
 homeRouter.get("/", (_, res) => {
-  if(!res.status(200)) return res.json({ error: "Algo salió terriblemente mal! 😨"});
   res.json({ message: "Bienvenid@ 🙂"})
-
 });
 homeRouter.use("/api", authRouter)
-homeRouter.use("/api", policies("admin", "user"), userRouter)
+homeRouter.use("/api", userRouter)
 
 export default homeRouter;

@@ -4,6 +4,7 @@ import { policies, validateUserPolicie } from '../middleware/policies.middleware
 import { userController } from "../controllers/user.controller.js";
 
 const userRouter = Router();
+
 userRouter.use(requireLoginOrJwt);
 
 userRouter.get("/users", policies("admin"), userController.getAll);
@@ -12,8 +13,19 @@ userRouter.put("/users/:id", policies("admin"), userController.update);
 userRouter.delete("/users/:id", policies("admin"), userController.delete);
 
 userRouter.get("/sessions/current", requireAuth, (req, res) => {
+  let u;
+  if(req.user || req.session.user){
+    u = req.user ?? req.session?.user;
+  }
   res.json({ 
-    user: req.user || req.session?.user
+    user: {
+      id: u._id,
+      first_name: u.first_name,
+      last_name: u.last_name,
+      email: u.email,
+      age: u.age,
+      role: u.role
+    }
   });
 });
 export default userRouter;

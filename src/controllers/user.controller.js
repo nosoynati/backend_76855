@@ -1,5 +1,6 @@
-import { updateUserDto } from "../dto/user.dto";
-import { userService } from "../services/user.service";
+import { updateUserDto } from "../dto/user.dto.js";
+import mongoose from "mongoose";
+import { userService } from "../services/user.service.js";
 
 export const userController = {
   getAll: async (_, res) => {
@@ -29,9 +30,8 @@ export const userController = {
         Error: "El id no es válido ❌"
       });
       const { first_name, last_name, email, age, role } = await userService.getById(id)
-      return u 
-        ? res.json({ first_name, last_name, email, age, role }) 
-        : res.status(404).json({Error: "No encontrado 🔍❌"});
+      const u = { first_name, last_name, email, age, role };
+      return u ? res.json({ user: u }) : res.status(404).json({Error: "No encontrado 🔍❌"});
     }catch(e){
       next(e)
     }

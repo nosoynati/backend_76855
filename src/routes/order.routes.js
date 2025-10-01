@@ -7,7 +7,7 @@ orderRouter.get("/view", orderController.listView);
 orderRouter.get("/", requireLogin, orderController.getOrders);
 orderRouter.get("/:id", orderController.getOrders);
 orderRouter.post("/", orderController.createOrder);
-orderRouter.put("/:id", orderController.updateOrder);
+orderRouter.put("/:id", orderController.update);
 // orderRouter.delete("/:id", orderController.deleteOrder)
 
 export default orderRouter;

@@ -13,6 +13,8 @@ export class BaseDao {
   };
   async getAll(filter = {}, options = {}) {
     const q = this.model.find(filter);
-    
-  }
+  };
+  async update(id,data){
+    return await this.model.findOneAndUpdate(id,data);
+  };
 }
