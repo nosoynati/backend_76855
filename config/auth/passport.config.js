@@ -1,15 +1,14 @@
 import passport from "passport";
-// import local from "passport-local";
 import { Strategy as GithubStrategy } from "passport-github2";
 import { Strategy as LocalStrategy } from "passport-local";
 import { Strategy as JwtStrategy } from "passport-jwt";
 import bcrypt from "bcrypt";
 import dotenv from "dotenv";
-// import Strategy from 'passport-local'
 import { User } from "../models/userModel.js";
 
 // const local = local.Strategy;
 dotenv.config();
+
 const getCookie = (req) => {
   if (req && req.cookies && req.cookies.access_token) {
     return req.cookies.access_token;

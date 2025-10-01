@@ -22,8 +22,8 @@ import orderRouter from "../src/routes/order.routes.js";
 
 const app = express();
 dotenv.config({ quiet: true});
-const PORT = env.PORT || 8080;
-const SECRET = env.SECRET;
+const PORT = process.env.PORT || 8080;
+const SECRET = process.env.SECRET;
 
 app.use(logger);
 app.use(express.json());

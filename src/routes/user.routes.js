@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { User } from "../../config/models/userModel.js";
-import { requiereJwtCookie, requireLogin } from "../middleware/auth.middleware.js";
-import { policies, current } from '../middleware/policies.middleware.js';
+import { requiereJwtCookie, requireAuth, requireJWT, requireLogin } from "../middleware/auth.middleware.js";
+import { policies, current, validateUserPolicie } from '../middleware/policies.middleware.js';
 
 const userRouter = Router();
 
@@ -16,8 +16,7 @@ userRouter.get("/users", policies("admin"), async (_, res) => {
         last_name: u.last_name,
         age: u.age,
         email: u.email,
-        role: u.role,
-        cart: u.cart ?? []
+        role: u.role
       });
     });
 
@@ -32,7 +31,7 @@ userRouter.get("/users", policies("admin"), async (_, res) => {
     });
   }
 });
-userRouter.get("/users/:id", current, async (req, res) => {
+userRouter.get("/users/:id", validateUserPolicie("admin"), async (req, res) => {
   try {
     const id = req.params?.id;
     const { first_name, last_name, age, email, role } = await User.findOne({ _id: id });
@@ -88,8 +87,8 @@ userRouter.delete("/users/:id", policies("admin"), async (req, res) => {
   }
 });
 
-userRouter.get("/sessions/current", requiereJwtCookie, (req, res) => {
-  res.json({
+userRouter.get("/sessions/current", requireAuth, (req, res) => {
+  res.json({ 
     user: req.user || req.session?.user
   });
 });
