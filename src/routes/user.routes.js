@@ -1,91 +1,15 @@
 import { Router } from "express";
-import { User } from "../../config/models/userModel.js";
-import { requiereJwtCookie, requireAuth, requireJWT, requireLogin } from "../middleware/auth.middleware.js";
-import { policies, current, validateUserPolicie } from '../middleware/policies.middleware.js';
+import { requireAuth, requireLoginOrJwt } from "../middleware/auth.middleware.js";
+import { policies, validateUserPolicie } from '../middleware/policies.middleware.js';
+import { userController } from "../controllers/user.controller.js";
 
 const userRouter = Router();
+userRouter.use(requireLoginOrJwt);
 
-userRouter.get("/users", policies("admin"), async (_, res) => {
-  try {
-    const result = await User.find();
-    const users = [];
-    result.map((u) => {
-      users.push({
-        id: u._id,
-        first_name: u.first_name,
-        last_name: u.last_name,
-        age: u.age,
-        email: u.email,
-        role: u.role
-      });
-    });
-
-    res.json({
-      status: "Success ✨",
-      payload: users,
-    });
-  } catch (error) {
-    res.status(404).json({
-      status: "error",
-      message: error.message,
-    });
-  }
-});
-userRouter.get("/users/:id", validateUserPolicie("admin"), async (req, res) => {
-  try {
-    const id = req.params?.id;
-    const { first_name, last_name, age, email, role } = await User.findOne({ _id: id });
-    res.json({ first_name, last_name, age, email, role });
-  } catch (err) {
-    res.status(500).json({ status: "Error", error: err });
-  }
-});
-
-userRouter.put("/users/:id", policies("admin"), async (req, res) => {
-  const id = req.params.id;
-  const { first_name, last_name, email, age, role } = req.body;
-  try {
-    const user = await User.findOne({ _id: id });
-    if (!user) {
-      throw new Error("User not found!💣");
-    }
-    const newUser = {
-      first_name: first_name ?? user.first_name,
-      last_name: last_name ?? user.last_name,
-      email: email ?? user.email,
-      role: role ?? user.role,
-      age: age ?? user.age,
-    };
-    const updateData = await User.updateOne({ _id: id }, newUser);
-    res.json({
-      success: "success",
-      payload: updateData,
-    });
-  } catch (error) {
-    res.status(400).json({
-      status: "error",
-      error: error.message,
-    });
-  }
-});
-userRouter.delete("/users/:id", policies("admin"), async (req, res) => {
-  const id = req.params.id;
-
-  try {
-    const result = await User.deleteOne({ _id: id });
-    if (!result) {
-      throw new Error("User not found!");
-    }
-    res.status(204).json({
-      status: "success",
-    });
-  } catch (error) {
-    res.status(400).json({
-      status: "error",
-      error: error.message,
-    });
-  }
-});
+userRouter.get("/users", policies("admin"), userController.getAll);
+userRouter.get("/users/:id", validateUserPolicie("admin"), userController.getId);
+userRouter.put("/users/:id", policies("admin"), userController.update);
+userRouter.delete("/users/:id", policies("admin"), userController.delete);
 
 userRouter.get("/sessions/current", requireAuth, (req, res) => {
   res.json({ 
