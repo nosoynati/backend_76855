@@ -9,7 +9,7 @@ import { connectAuto } from "../config/db.config.js";
 import homeRouter from "../src/routes/main.routes.js";
 
 import initPassport from "../config/auth/passport.config.js";
-
+import cors from 'cors';
 import logger from "../src/middleware/logger.middleware.js";
 
 // hbs
@@ -20,7 +20,7 @@ import { hbsHelpers } from "../src/utils/hbs.helpers.js";
 import orderRouter from "../src/routes/order.routes.js";
 
 const app = express();
-dotenv.config({ quiet: true});
+dotenv.config({ quiet: true });
 const PORT = process.env.PORT || 8080;
 const SECRET = process.env.SECRET;
 
@@ -38,6 +38,7 @@ const startServer = async () => {
     client: (await import("mongoose")).default.connection.getClient(),
     ttl: 60 * 60,
   });
+  app.use(cors());
   app.use(
     session({
       secret: SECRET,
@@ -54,6 +55,7 @@ const startServer = async () => {
   );
   app.engine('handlebars', engine({
     defaultLayout: 'main',
+    extname:".hbs",
     layoutsDir: path.join(__dirname, '../views/layouts'),
     helpers: hbsHelpers
   }))

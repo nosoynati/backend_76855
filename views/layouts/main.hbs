@@ -11,22 +11,33 @@
   <style>
     :root {
       color-scheme: light dark;
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
     }
 
     body {
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
-      margin: 24px;
+      font-family: system-ui, -apple-system, Segoe UI,Helvetica, Roboto, , Arial, sans-serif;
+      margin: 1rem;
+    }
+    .main {
+      margin: auto;
+    }
+    .container {
+      display: flex;
+      flex-direction: column;
     }
 
     header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 16px;
+      margin-bottom: 0;
     }
 
     table {
       border-collapse: collapse;
+      margin: auto;
       width: 100%;
     }
 
@@ -34,7 +45,7 @@
     td {
       border-bottom: 1px solid #9993;
       padding: 8px 10px;
-      text-align: left;
+      text-align: center;
     }
 
     th {

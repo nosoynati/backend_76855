@@ -12,7 +12,8 @@ export class BaseDao {
     return await this.model.findOne(filter).lean();
   };
   async getAll(filter = {}, options = {}) {
-    const q = this.model.find(filter);
+    return await this.model.find(filter);
+    
   };
   async update(id,data){
     return await this.model.findOneAndUpdate(id,data);

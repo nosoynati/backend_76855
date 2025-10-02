@@ -1,10 +1,14 @@
 export const policies = (...roles) => (req, res, next) => {
+  console.log("acá 01", req.user)
   if (!req.user && req.session && req.session.user) {
     req.user = req.session.user
+    console.log(req.user,"acá 1")
   };
   if(!req.user && req.jwt){
     req.user = req.jwt;
+    console.log(req.user,"acá 2")
   }
+
   if(!req.user) return res.status(401).json({ error: "No autorizado 🙅‍♀️❌"});
   if(!roles.includes(req.user.role)) return res.status(403).json({ Error: "Verificá tus privilegios💅"});
   next();
@@ -24,7 +28,7 @@ export const current = (req, res, next) => {
 export const validateUserPolicie = (...roles) => (req,res,next) => {
   const paramId = req.params && req.params.id;
   if(!req.user && req.jwt) req.user = req.jwt;
-  const user = String(req.user?.sub ?? req.user?._id ?? req.suer?.id ?? "");
+  const user = String(req.user?.sub ?? req.user?._id ?? req.user?.id ?? "");
   if(user == String(paramId)){
     return next();
   }

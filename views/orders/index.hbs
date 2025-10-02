@@ -12,22 +12,22 @@
   </form>
 </section>
 
-<table aria-details="table">
+<table class="table table-dark table-striped-columns">
   <thead>
     <tr>
-      <th colspan="10">Código</th>
-      <th>Comprador</th>
-      <th>Email</th>
-      <th>Ítems</th>
-      <th>Total</th>
-      <th>Estado</th>
-      <th>Fecha</th>
+      <th scope="col">Código</th>
+      <th scope="col">Comprador</th>
+      <th scope="col">Email</th>
+      <th scope="col">Ítems</th>
+      <th scope="col">Total</th>
+      <th scope="col">Estado</th>
+      <thscope="col">Fecha</th>
     </tr>
   </thead>
   <tbody>
     {{#each orders}}
       <tr>
-        <td>{{code}}</td>
+        <td scope="row">{{code}}</td>
         <td>{{buyerName}}</td>
         <td>{{buyerEmail}}</td>
         <td>

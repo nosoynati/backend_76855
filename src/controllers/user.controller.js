@@ -29,9 +29,15 @@ export const userController = {
       if(!mongoose.Types.ObjectId.isValid(id)) return res.status(400).json({
         Error: "El id no es válido ❌"
       });
-      const { first_name, last_name, email, age, role } = await userService.getById(id)
-      const u = { first_name, last_name, email, age, role };
-      return u ? res.json({ user: u }) : res.status(404).json({Error: "No encontrado 🔍❌"});
+      const u = await userService.getById(id)
+      const user = {
+        first_name: u.first_name,
+        last_name: u.last_name,
+        email: u.email,
+        age: u.age,
+        role: u.role
+      };
+      return user ? res.json({ user: u }) : res.status(404).json({Error: "No encontrado 🔍❌"});
     }catch(e){
       next(e)
     }

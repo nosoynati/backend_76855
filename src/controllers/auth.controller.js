@@ -64,7 +64,7 @@ export const logout = async (req, res, next) => {
 };
 export const jwtLogin = async (req, res) => {
   const { email, password } = req.body;
-  const user = await User.findOne({ email });
+  const user = await userService.findOne({ email: email });
   if (!user || !user.password)
     return res.status(401).json({
       error: "Credenciales inválidas ❌",
@@ -73,7 +73,7 @@ export const jwtLogin = async (req, res) => {
   const ok = await bcrypt.compare(password, user.password);
   if (!ok) return res.status(401).json({ error: "Credenciales inválidas ❌" });
 
-  const payload = { sub: String(user._id), email: user.email, role: user.role };
+  const payload = { sub: String(user._id), email: user.email, first_name: user.first_name, last_name: user.last_name, age: user.age, role: user.role };
   console.log(req);
   const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "1h" });
 

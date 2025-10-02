@@ -49,33 +49,7 @@ export const createOrder = async (req, res, next) => {
     next(e);
   }
 };
-// export const createOrder = async (req, res) => {
-//   try {
-//     const { first_name, email } = req?.session.user;
-//     if(!email) {return res.status(400).json({ message: "Necesita iniciar sesión. Redirijirse a /api/auth/login"})};
-//     const { code, items } = req.body;
-//     if(!code || !items) res.status(400).json({ error: "no existe la orden "});
-//     const checkOrder = await Order.findOne({ code });
-//     if(checkOrder) return res.status(400).json({ error: "error"});
 
-//     const order = new Order({
-//       code,
-//       items,
-//       buyerName: first_name,
-//       buyerEmail: email
-
-//     })
-//     await order.save();
-//     res.status(201).json({
-//       status: res.statusCode
-//     })
-
-//   } catch (e) {
-//     res.status(400).json({
-//       error: e.message,
-//     });
-//   }
-// };
 export const update = async (req, res, next) => {
   try {
     const { id } = req.params;

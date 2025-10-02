@@ -15,7 +15,7 @@ authRouter.post("/auth/logout", requireLogin, authController.logout);
 // JWT login
 authRouter.post("/auth/jwt/login", authController.jwtLogin);
 authRouter.get("/auth/jwt/me", requiereJwtCookie, authController.jwtSession);
-authRouter.post("/auth/jwt/logout", requiereJwtCookie, requireLogin, authController.jwtLogout);
+authRouter.post("/auth/jwt/logout", requiereJwtCookie, authController.jwtLogout);
 
 // GITHUB AUTH
 authRouter.get("/github", passport.authenticate("github", { scope: ["user: email"] }));

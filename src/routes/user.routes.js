@@ -1,11 +1,11 @@
 import { Router } from "express";
-import { requireAuth, requireLoginOrJwt } from "../middleware/auth.middleware.js";
+import { requireAuth, requireLoginOrJwt, requiereJwtCookie } from "../middleware/auth.middleware.js";
 import { policies, validateUserPolicie } from '../middleware/policies.middleware.js';
 import { userController } from "../controllers/user.controller.js";
 
 const userRouter = Router();
 
-userRouter.use(requireLoginOrJwt);
+// userRouter.use();
 
 userRouter.get("/users", policies("admin"), userController.getAll);
 userRouter.get("/users/:id", validateUserPolicie("admin"), userController.getId);
@@ -14,7 +14,8 @@ userRouter.delete("/users/:id", policies("admin"), userController.delete);
 
 userRouter.get("/sessions/current", requireAuth, (req, res) => {
   let u;
-  if(req.user || req.session.user){
+  console.log(u)
+  if(req.user || req.session?.user){
     u = req.user ?? req.session?.user;
   }
   res.json({ 
