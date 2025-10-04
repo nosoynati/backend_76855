@@ -11,6 +11,9 @@ export class BaseDao {
   async getOne(filter = {}){
     return await this.model.findOne(filter).lean();
   };
+  async getOneDocument(filter = {}){
+    return await this.model.findOne(filter);
+  };
   async getAll(filter = {}, options = {}) {
     return await this.model.find(filter);
     

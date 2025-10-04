@@ -4,18 +4,18 @@ import { Service } from "./baseService.js";
 
 export class CartService extends Service {
   constructor(dao = new CartDao()) {
-    super(Service);
+    super(dao);
     this.dao = dao;
   }
   async get() {
     return await this.dao.getAll();
   }
-  async getId(id) {
-    return await this.dao.getById(id); // pass raw id, not wrapped
+  async findById(id) {
+    return await this.dao.getById(id);
   }
   async getByUser(userId) {
-  return await this.dao.getOne({ user: userId });
-}
+    return await this.dao.getOneDocument({ user: userId });
+  }
   async create(dto) {
     return await this.dao.create(dto);
   }

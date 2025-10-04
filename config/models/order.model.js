@@ -4,7 +4,7 @@ const orderItemsSchema = new mongoose.Schema(
   {
     productId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Product",
+      ref: "product",
     },
     title: {
       type: String,
@@ -41,7 +41,8 @@ const orderSchema = mongoose.Schema(
       required: true,
     },
     items: {
-      type: [orderItemsSchema],
+      type: [mongoose.Schema.Types.ObjectId],
+      ref: "cart",
       default: [],
     },
     total: {

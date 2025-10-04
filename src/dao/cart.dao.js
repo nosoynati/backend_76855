@@ -7,6 +7,6 @@ export class CartDao extends BaseDao{
   };
 
   async create(dto){
-    return await this.dao.create(dto)
+    return await this.model.create(dto)
   }
 }

@@ -15,8 +15,9 @@ export function createProductDto(body) {
 export function updateCartDto(body, user) {
   const { id } = user ?? user.id ?? {};
   if (!String(id)) throw new Error("Missing session 🧨");
+  const updt = {};
   if (body?.items) updt.items = body.items;
-  if (body?.qty) updt.qty = qty;
+  if (body?.qty) updt.qty = body.qty;
   return updt;
 }
 
