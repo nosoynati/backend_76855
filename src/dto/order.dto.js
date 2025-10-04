@@ -2,7 +2,7 @@ export function createOrderDto(body, user) {
   const { email, first_name } = user ?? {};
   if (!email || !first_name) throw new Error("Missing session 🧨");
   const { code, items } = body ?? {};
-  if (!code) throw new Error("Missing data 💦");
+  if (!code || !items || !Array.isArray(items)) throw new Error("Missing data 💦");
   return { code, items, buyerEmail: email, buyerName: first_name };
 }
 

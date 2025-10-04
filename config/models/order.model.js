@@ -40,11 +40,7 @@ const orderSchema = mongoose.Schema(
       type: String,
       required: true,
     },
-    items: {
-      type: [mongoose.Schema.Types.ObjectId],
-      ref: "cart",
-      default: [],
-    },
+    items: [orderItemsSchema],
     total: {
       type: Number,
       min: 0,

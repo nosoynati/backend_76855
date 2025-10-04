@@ -1,5 +1,8 @@
 import { orderService } from "../services/order.service.js";
 import { createOrderDto, updateOrder } from "../dto/order.dto.js";
+import { cartService } from "../services/cart.service.js";
+import { Product } from "../../config/models/product.model.js";
+import mongoose from "mongoose";
 
 export const orderController = {
   listView: async (req, res) => {
@@ -41,11 +44,36 @@ export const orderController = {
 
   createOrder: async (req, res, next) => {
     try {
+      const id = req.user?._id ?? req.session?.user?._id ?? req.user?.sub?._id;
+      if (!id) return res.status(401).json({ error: "No se encontró el usuario" });
       const { email, first_name } = req.session?.user;
-      const dto = createOrderDto(req.body, { email, first_name });
+      const cart = await cartService.getByUser(id);
+      if (!cart || !cart.items || cart.items.length === 0) {
+        return res.status(404).json({ error: "No se encontró el carrito o está vacío" });
+      }
+      
+      // Get order code from request body
+      const { code } = req.body;
+      if (!code) {
+        return res.status(400).json({ error: "Order code is required" });
+      }
+      
+      // Convert cart items to order items with product details
+      const orderItems = await Promise.all(
+        cart.items.map(async (item) => {
+          const product = await Product.findById(item.product).lean();
+          return {
+            productId: item.product,
+            title: product?.title || `Product ${item.product}`,
+            qty: item.qty,
+            unitPrice: product?.unitPrice || 0
+          };
+        })
+      );
+      
+      const dto = createOrderDto({ code, items: orderItems }, { email, first_name });
       const order = await orderService.create(dto);
-      order.save();
-      res.status(201).json({ status: "Ok! 🎉" });
+      res.status(201).json({ status: "Ok! 🎉", order });
     } catch (e) {
       next(e);
     }
