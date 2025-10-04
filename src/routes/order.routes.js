@@ -1,15 +1,14 @@
 import { Router } from "express";
-import cors from 'cors';
 import {orderController} from '../controllers/order.controller.js';
-// import { requireLogin } from "../middleware/auth.middleware.js";
+import { requireLogin, requireLoginOrJwt, requireAuth } from "../middleware/auth.middleware.js";
 
 const orderRouter = Router();
-
-orderRouter.use("/view", orderController.listView.bind(orderController));
-orderRouter.get("/api", orderController.getOrders.bind(orderController));
-orderRouter.get("/:id", orderController.getOrders.bind(orderController));
+orderRouter.use(requireLoginOrJwt); // no funciona en navegador
+orderRouter.get("/view", orderController.listView);
+orderRouter.get("/api", orderController.getOrders);
+orderRouter.get("/api/:id", orderController.getOrders);
 orderRouter.post("/api", orderController.createOrder);
-orderRouter.put("/:id", orderController.update);
-// orderRouter.delete("/:id", orderController.deleteOrder)
+orderRouter.put("/api/:id", orderController.update);
+orderRouter.delete("/api/:id", orderController.deleteOrder)
 
 export default orderRouter;

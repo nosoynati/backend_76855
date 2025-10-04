@@ -20,7 +20,7 @@ export const orderController = {
         currentStatus: status || "all",
       });
     } catch (e) {
-      console.error(e)
+
       res.status(500).send("Hubo un error *sadface*");
     }
   },
@@ -49,29 +49,25 @@ export const orderController = {
       const { email, first_name } = req.session?.user;
       const cart = await cartService.getByUser(id);
       if (!cart || !cart.items || cart.items.length === 0) {
-        return res.status(404).json({ error: "No se encontró el carrito o está vacío" });
+        return res.status(404).json({ error: "No hay carrito o está vacío ❌" });
       }
       
-      // Get order code from request body
-      const { code } = req.body;
-      if (!code) {
-        return res.status(400).json({ error: "Order code is required" });
-      }
+      const { code, status } = req.body;
+      if (!code) return res.status(400).json({ Error: "Falta código requerido! ❌" });
       
-      // Convert cart items to order items with product details
       const orderItems = await Promise.all(
         cart.items.map(async (item) => {
           const product = await Product.findById(item.product).lean();
           return {
             productId: item.product,
-            title: product?.title || `Product ${item.product}`,
+            title: product?.title,
             qty: item.qty,
-            unitPrice: product?.unitPrice || 0
+            unitPrice: product?.unitPrice
           };
         })
       );
       
-      const dto = createOrderDto({ code, items: orderItems }, { email, first_name });
+      const dto = createOrderDto({ code, items: orderItems, status }, { email, first_name });
       const order = await orderService.create(dto);
       res.status(201).json({ status: "Ok! 🎉", order });
     } catch (e) {

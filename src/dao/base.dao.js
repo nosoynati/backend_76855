@@ -19,9 +19,9 @@ export class BaseDao {
     
   };
   async update(id,data){
-    return await this.model.findOneAndUpdate(id,data);
+    return await this.model.findOneAndUpdate({ _id: id }, data, { new: true });
   };
   async remove(id){
-    return await this.model.remove(id);
+    return await this.model.findByIdAndDelete(id);
   };
 }

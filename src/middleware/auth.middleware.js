@@ -27,13 +27,14 @@ export const requireAuth = (req, res, next) => {
       req.user = jwtoken;
       return next();
     } catch (e) {
-      res.status(400).json({Error: "Token no válido"})
+      return res.status(400).json({Error: "Token no válido"})
     }
   };
   if (req.session?.user) {
     req.user = req.session.user;
     return next();
   }
+  
   return res.status(401).json({ 
     Error: "No autorizado ❌💀" 
   });
@@ -46,7 +47,7 @@ export const requireLoginOrJwt = (req, res, next) => {
     if (!err) return next();
     requiereJwtCookie(req, res, (err2) => {
       if (!err2) return next();
-      res.status(401).json({ Error: "No autorizado ❌💀", messgae: e.messgae });
+      res.status(401).json({ Error: "No autorizado ❌💀", messgae: err2?.messgae });
     });
   });
 };
