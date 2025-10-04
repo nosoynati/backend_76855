@@ -7,6 +7,6 @@ const productrouter = Router();
 
 productrouter.get("/", productController.get);
 productrouter.get("/:id", productController.get);
-productrouter.post("/", requiereJwtCookie, validateUserPolicie("admin"), productController.create);
+productrouter.post("/", validateUserPolicie("admin"), productController.create);
 
 export default productrouter;

@@ -6,7 +6,7 @@ import MongoStore from "connect-mongo";
 import passport from "passport";
 
 import { connectAuto } from "../config/db.config.js";
-import homeRouter from "../src/routes/main.routes.js";
+import router from "../src/routes/main.routes.js";
 
 import initPassport from "../config/auth/passport.config.js";
 import cors from 'cors';
@@ -17,7 +17,6 @@ import { engine } from 'express-handlebars';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { hbsHelpers } from "../src/utils/hbs.helpers.js";
-import orderRouter from "../src/routes/order.routes.js";
 
 const app = express();
 dotenv.config({ quiet: true });
@@ -28,6 +27,10 @@ app.use(logger);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser(SECRET));
+app.use(cors({
+  credentials: false
+})
+);
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -38,7 +41,7 @@ const startServer = async () => {
     client: (await import("mongoose")).default.connection.getClient(),
     ttl: 60 * 60,
   });
-  app.use(cors());
+
   app.use(
     session({
       secret: SECRET,
@@ -55,7 +58,6 @@ const startServer = async () => {
   );
   app.engine('handlebars', engine({
     defaultLayout: 'main',
-    extname:".hbs",
     layoutsDir: path.join(__dirname, '../views/layouts'),
     helpers: hbsHelpers
   }))
@@ -66,8 +68,7 @@ const startServer = async () => {
   app.use(passport.initialize());
   app.use(passport.session());
 
-  app.use("/", homeRouter);
-  app.use("/orders", orderRouter)
+  app.use("/", router);
 
   app.use((_, res) => {
     res.status(400).json({

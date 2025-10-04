@@ -3,11 +3,11 @@ import { cartController } from "../controllers/cart.controller.js";
 import { requiereJwtCookie } from "../middleware/auth.middleware.js";
 import { validateUserPolicie } from "../middleware/policies.middleware.js";
 
-const cartRouter = Router();
+const cartRouter = Router({mergeParams: true});
 
-cartRouter.use(requiereJwtCookie,validateUserPolicie("user"));
-cartRouter.post("/cart/add", cartController.add);
-cartRouter.get("/cart/", cartController.get);
-cartRouter.put("/cart", cartController.update);
+cartRouter.use(validateUserPolicie("user"));
+cartRouter.post("/add", cartController.add);
+cartRouter.get("/", cartController.get);
+cartRouter.put("/", cartController.update);
 
 export default cartRouter;
