@@ -27,7 +27,7 @@ function buildTransport() {
 }
 
 async function renderTemplate(templateName, data) {
-    const viewDir = path.join(__dirname, "../../views/emails");
+    const viewDir = path.join(__dirname, "../../views/mails");
     const filePath = path.join(viewDir, `${templateName}.handlebars`);
     const source = await fs.readFile(filePath, "utf-8");
     const tpl = Handlebars.compile(source);
