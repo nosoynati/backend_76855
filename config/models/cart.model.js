@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { Product } from "./product.model.js";
 
 const cartItemSchema = new mongoose.Schema({
   product: {
@@ -10,6 +11,7 @@ const cartItemSchema = new mongoose.Schema({
     type: Number,
     required: true,
     default: 1,
+    min: 1
   },
 });
 
@@ -24,5 +26,24 @@ const cartSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+
+cartSchema.pre("validate", async function (next) {
+  try {
+    const items = Array.isArray(this.items) ? this.items : [];
+    for (const item of items) {
+      if (!item || !item.product) continue;
+      const product = await Product.findById(item.product).select("stock");
+      if (!product) continue; // if product was removed, skip stock check
+      const qty = Number(item.qty) || 0;
+      if (qty > product.stock) {
+        console.error("La cantidad excede el stock ⚠");
+        return next(new Error("La cantidad excede el stock ⚠"));
+      }
+    }
+    next();
+  } catch (err) {
+    next(err);
+  }
+});
 
 export const Cart = new mongoose.model("cart", cartSchema);

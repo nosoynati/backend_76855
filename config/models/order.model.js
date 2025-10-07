@@ -70,7 +70,6 @@ orderSchema.pre("validate", function (next) {
     
     next();
   } catch (error) {
-    console.error("Error=",error);
     next(error);
   }
 });

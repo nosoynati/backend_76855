@@ -51,13 +51,11 @@ export const logout = async (req, res, next) => {
       req.session.destroy((err2) => {
         err2 && next(err2);
         res.clearCookie("connect.sid");
-        res.clearCookie("access_token");
         // return res.json({ message: "See you, space cowboy"})
         return res.json({ message: "Logout exitoso. Nos vemos!🤙" });
       });
     } else {
       res.clearCookie("connect.sid");
-      res.clearCookie("access_token", { path: "/" });
       return res.json({ message: "Logout (sin session 😞)" });
     }
   });
