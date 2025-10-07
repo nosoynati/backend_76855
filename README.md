@@ -7,22 +7,37 @@ Consignas:
 2. Rutas y endpoints: 
 
 Rough draft of folder structure
-See complete view [here](/README.paths.md)
 
 ```js
 │config
 │ ├─models
-│ │ └─model.js
+│ │ └─ models.js
 │ ├─auth
-│ │ └─passport.config.js
-│ └─db.config.js
-├src
+│ │ └─ passport.config.js
+│ └─ db.config.js
+├ server
+│ ├─ server.js
+├ src
 │ ├─middlewares
-│ │ └─auth.middleware.js
+│ │ └─ auth.middleware.js
+│ ├─controllers
+│ │ └─ controller.js
+│ ├─dao
+│ │ └─ dao.js
+│ ├─dto
+│ │ └─ dto.js
 │ ├─routes
-│ │ └─main.routes.js
+│ │ └─ main.routes.js
+│ ├─ services
+│ │ └─ service.js
 │ ├─utils
-│ │ └─isValidPassword.js
+│ │ ├─ hbsHelper.js
+│ │ └─ isValidPassword.js
+│ ├─ views
+│ │ ├─ layouts
+│ │ ├─ mails
+│ │ ├─ orders
+│ │ └─ main.handlebars.js
 │ └─app.js
 └package.json
 ```
