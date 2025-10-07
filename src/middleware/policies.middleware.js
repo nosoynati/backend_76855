@@ -3,8 +3,8 @@ export const policies = (...roles) => (req, res, next) => {
     req.user = req.session.user
 
   };
-  if(!req.user && req.jwt){
-    req.user = req.jwt;
+  if(!req.user && req.user.sub){
+    req.user = req.user.sub;
   }
 
   if(!req.user) return res.status(401).json({ error: "No autorizado 🙅‍♀️❌"});
