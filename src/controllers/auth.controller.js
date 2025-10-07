@@ -1,5 +1,5 @@
 import { User } from "../../config/models/userModel.js";
-import { createUserDto} from "../dto/user.dto.js";
+import { createUserDto } from "../dto/user.dto.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import passport from "passport";
@@ -73,8 +73,14 @@ export const jwtLogin = async (req, res) => {
   const ok = await bcrypt.compare(password, user.password);
   if (!ok) return res.status(401).json({ error: "Credenciales inválidas ❌" });
 
-  const payload = { sub: String(user._id), email: user.email, first_name: user.first_name, last_name: user.last_name, age: user.age, role: user.role };
-  console.log(req);
+  const payload = {
+    sub: String(user._id),
+    email: user.email,
+    first_name: user.first_name,
+    last_name: user.last_name,
+    age: user.age,
+    role: user.role,
+  };
   const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "1h" });
 
   res.cookie("access_token", token, {
@@ -101,4 +107,4 @@ export const jwtSession = async (req, res) => {
 export const jwtLogout = async (_, res) => {
   res.clearCookie("access_token", { path: "/" });
   res.json({ message: "Logout OK! Bai bai 🐱" });
-}
+};

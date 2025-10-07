@@ -1,4 +1,4 @@
-import { mailerService } from '../services/mailer.service.js';
+import { mailerService } from '../services/mail.service.js';
 
 class MailerController {
     async sendWelcome(req, res) {
