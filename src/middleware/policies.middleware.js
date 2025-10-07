@@ -3,7 +3,7 @@ export const policies = (...roles) => (req, res, next) => {
     req.user = req.session.user
 
   };
-  if(!req.user && req.user.sub){
+  if(!req.user && req.user?.sub){
     req.user = req.user.sub;
   }
 

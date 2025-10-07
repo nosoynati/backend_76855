@@ -6,7 +6,9 @@ Consignas:
 1. Desarrollar un sitio de ecommerce con un sistema de autenticación de usuarios
 2. Rutas y endpoints: 
 
-Rough draft of folder structure
+### Estrucutra de carpetas
+<details>
+<summary> ver más </summary>
 
 ```js
 │config
@@ -42,6 +44,9 @@ Rough draft of folder structure
 └package.json
 ```
 
+
+</details>
+
 ### Rutas
 
 * root: `'/'`
@@ -75,36 +80,39 @@ Rough draft of folder structure
       "email": "XXX@mail.com",
       "password":"XXXXXXXXX",
       "age": XX,
-      "role": ["user" || "admin" || "editor"]
+      "role": "user"
     }
   ```
   - [POST] /api/auth/logout
   - [GET] /api/sessions/current [🔐 logged in user]
 
+- Cart:
+
+  - [GET] /cart [🔐 users]
+  - [POST] /cart
+  - [DELETE] /cart/{id}
+
+  ```json
+  // cart body example
+    {
+    "productId":"68ddb3ba16ac602c86742d2b",
+    "qty":2
+    }
+  ```
 
 - Order:
 
-  - [GET] /orders
-  - [GET] /orders/{id}
+  La orden se genera a partir del carrito creado, por lo que se pasa sólo un código.
+  Al hacer get deberá mostrar la orden con su id de mdb, el carrito y el carrito.
+
+  - [GET] /orders/api [🔐 users]
+  - [GET] /orders/api/{id}
   - [GET] /orders/listview [💻 html view]
   - [POST] /orders/ [🔐 users]
+
   ```json
   //order body example
-     {
-      "order":"XXX",
-      "items":[
-        {
-          "nombre":"producto 1",
-          "unitPrice":1000,
-          "qty":1
-        },
-        {
-          "nombre":"producto 2",
-          "unitPrice":3000,
-          "qty":3
-        }
-      ]
+    {
+      "code":"XXX"
     }
   ```
-  - [GET] /cart
-  - [DELETE] /cart/{id}

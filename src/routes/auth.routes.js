@@ -1,7 +1,7 @@
 import { Router } from "express";
-import * as authController from '../controllers/auth.controller.js';
+import * as authController from "../controllers/auth.controller.js";
 import passport from "passport";
-import { requireLogin, alreadyLoggedin, requiereJwtCookie } from "../middleware/auth.middleware.js";
+import { requireLogin, alreadyLoggedin, requiereJwtCookie,requireLoginOrJwt } from "../middleware/auth.middleware.js";
 
 const authRouter = Router();
 
@@ -13,9 +13,9 @@ authRouter.post("/auth/register", authController.register);
 authRouter.post("/auth/login", alreadyLoggedin, authController.login);
 authRouter.post("/auth/logout", requireLogin, authController.logout);
 // JWT login
-authRouter.post("/auth/jwt/login", authController.jwtLogin);
-authRouter.get("/auth/jwt/me", requiereJwtCookie, authController.jwtSession);
-authRouter.post("/auth/jwt/logout", requiereJwtCookie, authController.jwtLogout);
+authRouter.post("/auth/jwt/login",alreadyLoggedin, authController.jwtLogin);
+authRouter.get("/auth/jwt/me", requireLoginOrJwt, authController.jwtSession);
+authRouter.post("/auth/jwt/logout", requireLoginOrJwt, authController.jwtLogout);
 
 // GITHUB AUTH
 authRouter.get("/github", passport.authenticate("github", { scope: ["user: email"] }));

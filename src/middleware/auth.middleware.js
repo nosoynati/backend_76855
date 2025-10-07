@@ -1,13 +1,13 @@
 import passport from "passport";
-import jwt from 'jsonwebtoken';
+import jwt from "jsonwebtoken";
 
 export function requireLogin(req, res, next) {
-  if (!req.session || !req.session.user) {
-    return res.status(401).json({
-      error: "No autorizado 😨",
-    });
+  if (req.user?.sub || (req.session && req.session?.user)) {
+    return next();
   }
-  next();
+  return res.status(401).json({
+    error: "No autorizado 😨",
+  });
 }
 
 export function alreadyLoggedin(req, res, next) {
@@ -16,7 +16,12 @@ export function alreadyLoggedin(req, res, next) {
       error: "Ya estás logeado 😅",
     });
   }
-  next();
+  passport.authenticate("jwt-cookie", { session: false }, (user) => {
+    if (user) {
+      return res.status(403).json({ error: "Ya estás logeado 😅" });
+    }
+    next();
+  })(req, res, next);
 }
 
 export const requireAuth = (req, res, next) => {
@@ -27,27 +32,19 @@ export const requireAuth = (req, res, next) => {
       req.user = jwtoken;
       return next();
     } catch (e) {
-      return res.status(400).json({Error: "Token no válido"})
+      return res.status(400).json({ Error: "Token no válido" });
     }
-  };
-  if (req.session?.user) {
-    req.user = req.session.user;
-    return next();
+  } else if (!req.session ?? !req.user) {
+    return res.status(401).json({ error: "no autorizado!" });
   }
-  
-  return res.status(401).json({ 
-    Error: "No autorizado ❌💀" 
-  });
+  next();
 };
 
 export const requiereJwtCookie = passport.authenticate("jwt-cookie", { session: false });
 
 export const requireLoginOrJwt = (req, res, next) => {
-  requireLogin(req, res, (err) => {
-    if (!err) return next();
-    requiereJwtCookie(req, res, (err2) => {
-      if (!err2) return next();
-      res.status(401).json({ Error: "No autorizado ❌💀", messgae: err2?.messgae });
-    });
-  });
+  if (req.session.user && req.user?.sub) {
+    return next();
+  }
+  requiereJwtCookie(req, res, next);
 };
