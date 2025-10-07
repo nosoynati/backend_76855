@@ -33,10 +33,9 @@ cartSchema.pre("validate", async function (next) {
     for (const item of items) {
       if (!item || !item.product) continue;
       const product = await Product.findById(item.product).select("stock");
-      if (!product) continue; // if product was removed, skip stock check
+      if (!product) continue;
       const qty = Number(item.qty) || 0;
       if (qty > product.stock) {
-        console.error("La cantidad excede el stock ⚠");
         return next(new Error("La cantidad excede el stock ⚠"));
       }
     }

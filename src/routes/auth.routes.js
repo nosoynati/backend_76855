@@ -1,7 +1,7 @@
 import { Router } from "express";
 import * as authController from "../controllers/auth.controller.js";
 import passport from "passport";
-import { requireLogin, alreadyLoggedin, requiereJwtCookie,requireLoginOrJwt } from "../middleware/auth.middleware.js";
+import { requireLogin, alreadyLoggedin, requireLoginOrJwt } from "../middleware/auth.middleware.js";
 
 const authRouter = Router();
 

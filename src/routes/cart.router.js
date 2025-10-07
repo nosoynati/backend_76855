@@ -5,7 +5,7 @@ import { policies } from "../middleware/policies.middleware.js";
 
 const cartRouter = Router({mergeParams: true});
 
-// cartRouter.use(requireLoginOrJwt);
+cartRouter.use(policies("user"));
 cartRouter.post("/add", cartController.add);
 cartRouter.get("/", cartController.get);
 cartRouter.put("/", cartController.update);
